@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static\\style.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+    <title>Ассистент комтехно</title>
+</head>
+<body>
+    <!-- навигационная панель -->
+    <div class="navbar">
+        <div class="long-title">
+            <h3 class="long-version">Виртуальный ассистент комтехно</h3>
+            <h3 class="short-version">Виртуальный ассистент</h3>
+        </div>
+        <div class="hamburger-menu">
+            <input id="menu__toggle" type="checkbox" />
+            <label class="menu__btn" for="menu__toggle">
+                <span></span>
+            </label>
+
+            <ul class="menu__box">
+                <li><a class="menu__item" href="/">На главную</a></li>
+                <li><a class="menu__item" href="https://comtehno.kg/">КОМТЕХНО</a></li>
+                <li><a class="menu__item" href="https://comtehno.kg/timetable/">Расписание</a></li>
+                <li><a class="menu__item" href="/chat">Чат  <em>beta</em></a></li>
+                <li><a class="menu__item" href="#" id="clear-history">Очистить историю</a></li>
+                <li><a class="menu__item" href="/info">Справки</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- контент -->
+    <div class="content">
+        <h2>Дополнительная информация</h2><br>
+            <div>
+                <p>У голосового помощника есть несколько вопросо-ответочных систем:</p>
+
+                <p>Приставки вроде <span>"/gpt"</span>, <span>"/гпт"</span> или <span>"/lstm"</span> используются для обозначения того,
+                    что вы обращаетесь к конкретному алгоритму или модели искусственного интеллекта при задании вопросов или запросов.</p>
+
+                    <p><span>tf-idf</span> - система векторного представления ответов на запросы. (по умолчанию)</p>
+                    <p><span>/gpt</span> - система на основе Генеративного Предобученного Трансформера.</p>
+                    <P><span>/lstm</span> - система ответа на запросы на основе LSTM (Long Short-Term Memory)</P>
+
+                    <p>Например:</p>
+                    <ul>
+                        <li>"<span>/gpt</span> Почему Python так популярен?"</li>
+                        <li>"<span>/гпт</span> Расскажи мне о технологии блокчейн."</li>
+                        <li>"<span>/lstm</span> Что такое искусственный интеллект?"</li>
+                    </ul>
+                    <p>Это помогает ассистенту понять, какому именно источнику задается вопрос, что может быть полезно, так как в системе работают несколько различных алгоритмов и моделей.</p>
+            </div>
+        <h2 style="margin-top: 70px;">Есще немного о LSTM</h2><br>
+        <div>
+            <p>Lstm - нейросеть которая лично разарбатывалась и обучалась разработчиком-студентом колледжа КОМТЕХНО.</p>
+            <p>Эта нейросеть все еще находится в начальной стадии развития. Вы можете убедиться в этом, отправив несколько запросов.</p>
+            Иногда (зачастую) она может выдавать неожиданные и забавные результаты).
+        </div>
+    </div>
+    <style>
+        .content div {
+            font-size: 18px;
+        }
+        span {
+            color: darkcyan;
+        }
+        body {
+            color: #d1d5db;
+        }
+        h2 {
+            color: #777777;
+        }
+    </style>
+</body>
+</html>
