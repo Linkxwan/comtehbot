@@ -66,18 +66,18 @@ logging.info("Успешно инициализированы переменны
 # vocab_size = 15175
 max_seq_length = 75
 # Загрузка токенизатора из файла pickle
-with open('data\\tokenizer_003.pkl', 'rb') as f:
+with open('data/tokenizer_003.pkl', 'rb') as f:
     tokenizer = pickle.load(f)
 
 # Путь к вашей папке saved_model
-saved_model_path = 'data\\comtehbot_haha.keras'
+saved_model_path = 'data/comtehbot_haha.keras'
 # Загрузка модели
 model = tf.keras.models.load_model(saved_model_path)
 
 
 # ===== ЗАГРУЗКА БАЗЫ ДАННЫХ =====
 # Загрузка данных из первого файла
-with open('data\\combined_file.json', 'r', encoding='utf-8') as file:
+with open('data/combined_file.json', 'r', encoding='utf-8') as file:
     data_combined = json.load(file)
 
 
