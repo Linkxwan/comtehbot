@@ -14,7 +14,7 @@ import httpx
 import scipy as sp
 import uvicorn
 import tensorflow as tf
-from fastapi import FastAPI, HTTPException, Request, Form, Response, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Request, Form, Response
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -325,13 +325,6 @@ async def download_json(response: Response):
     else:
         response.status_code = 404
         return {"error": "File not found"}
-    
-presentation_block = {
-    'Какие специальности есть в колледже?': 'Вся необходимая информация на ссылке: https://comtehno.kg/specialties/',
-    'Сколько стоит в этом учебном году контракт?': 'Оплата за обучение составляет 40 тысяч сом в год.',
-    'Приемная комиссия': 'Whatsapp 0707379957',
-    'Какие документы подать при поступлении?': 'Вся необходимая информация на ссылке: https://comtehno.kg/selection-committee/'
-}
 
 
 @app.get("/get_response")
@@ -559,116 +552,6 @@ async def clear_history(request: Request) -> RedirectResponse:
     # Очистка истории чата для данного пользователя
     chat_history_by_user[session_id] = []
     return RedirectResponse("/", status_code=303)
-
-
-class ConnectionManager:
-    def __init__(self):
-        """
-        Инициализирует менеджер подключений.
-        """
-        self.active_connections = {}
-
-    async def connect(self, websocket: WebSocket, client_id: str):
-        """
-        Устанавливает соединение с WebSocket и добавляет его в активные соединения.
-
-        Args:
-            websocket (WebSocket): WebSocket соединение.
-            client_id (str): Уникальный идентификатор клиента.
-        """
-        await websocket.accept()
-        self.active_connections[client_id] = websocket
-
-    def disconnect(self, client_id: str):
-        """
-        Отключает WebSocket соединение и удаляет его из активных соединений.
-
-        Args:
-            client_id (str): Уникальный идентификатор клиента.
-        """
-        del self.active_connections[client_id]
-
-    async def left_chat(self, client_id: str):
-        """
-        Отправляет сообщение о том, что клиент покинул чат, всем активным соединениям.
-
-        Args:
-            client_id (str): Уникальный идентификатор клиента.
-        """
-        formatted_message = f"""<div class="system-message-content">#{client_id} вышел из чата.</div>"""
-        for connection in self.active_connections.values():
-            await connection.send_text(formatted_message)
-
-    async def broadcast(self, message: str, sender: str):
-        """
-        Рассылает сообщение всем активным соединениям, предварительно форматируя его.
-
-        Args:
-            message (str): Сообщение, которое нужно отправить.
-            sender (str): Имя отправителя сообщения.
-        """
-        formatted_message = f"""
-            <span class="avatar">
-                <img src="static/user.png" alt="Avatar">
-            </span>
-            <div class="info-user">
-                <div class="name-user">{sender}</div>
-                <div class="message-content">{message}</div>
-            </div>
-        """
-        for connection in self.active_connections.values():
-            await connection.send_text(formatted_message)
-
-    def get_active_connections_count(self) -> int:
-        """
-        Возвращает количество активных подключений.
-
-        Returns:
-            int: Количество активных подключений.
-        """
-        return len(self.active_connections)
-
-
-manager = ConnectionManager()
-
-
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    """
-    Обрабатывает WebSocket подключение.
-
-    Args:
-        websocket (WebSocket): WebSocket соединение.
-        client_id (str): Уникальный идентификатор клиента.
-    """
-    await manager.connect(websocket, client_id)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await manager.broadcast(data, client_id)  # Передаем client_id как имя пользователя
-    except WebSocketDisconnect:
-        manager.disconnect(client_id)
-        await manager.left_chat(client_id)
-
-
-@app.get("/chat", response_class=HTMLResponse)
-async def get(request: Request):
-    """
-    Возвращает HTML страницу для чата.
-
-    Args:
-        request (Request): Объект запроса FastAPI.
-
-    Returns:
-        TemplateResponse: HTML страница для чата.
-    """
-    session_id = request.cookies.get("user_id") or "anonymous"
-    return templates.TemplateResponse("chat.html", {"request": request, "session_id": session_id})
-
-
-@app.get("/active_connections_count")
-async def get_active_connections_count():
-    return {"active_connections_count": manager.get_active_connections_count()}
 
 
 @app.get("/info", response_class=HTMLResponse)
