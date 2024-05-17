@@ -451,7 +451,7 @@ async def get_answer(request: Request, question: str = Form(...)) -> RedirectRes
     Returns:
         RedirectResponse: Перенаправление на домашнюю страницу.
     """
-    user_id = request.cookies.get("user_id")
+    user_id = request.cookies.get("user_id") or "anonymous"
     if user_id is None:
         raise HTTPException(status_code=400, detail="Session ID is missing")
     if not question:
